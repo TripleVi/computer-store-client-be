@@ -1,1 +1,7 @@
 export { default as Category } from './category.entity'
+export { default as File } from './file.entity'
+export { default as Option } from './option.entity'
+export { default as ProductFile } from './product-file.entity'
+export { default as Product } from './product.entity'
+export { default as Type } from './type.entity'
+export { default as Variant } from './variant.entity'
