@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common'
-import { CategoryService } from './category.service'
+import CategoryService from './category.service'
 
 @Controller('categories')
-export class CategoryController {
+export default class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
