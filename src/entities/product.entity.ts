@@ -17,7 +17,7 @@ export enum ProductStatus {
   PUBLISHED = 'published',
 }
 
-@Entity()
+@Entity('Product')
 export default class Product {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number

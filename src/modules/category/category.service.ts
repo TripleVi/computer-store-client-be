@@ -1,17 +1,82 @@
 import { Injectable } from '@nestjs/common'
-// import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Category } from 'src/entities'
+import { plainToInstance } from 'class-transformer'
+import { ProductResDto } from 'src/common/dto/product-res.dto'
+import { Category, Product } from 'src/entities'
+import { ProductStatus } from 'src/entities/product.entity'
 import { Repository } from 'typeorm'
+import { GetCategoriesDto } from './dto'
 
 @Injectable()
 export default class CategoryService {
   constructor(
-    @InjectRepository(Category) private readonly categoryRepo: Repository<Category>
-    // private readonly configService: ConfigService
+    @InjectRepository(Category) private readonly categoryRepo: Repository<Category>,
+    @InjectRepository(Product) private readonly productRepo: Repository<Product>
   ) {}
 
-  findAll() {
-    return this.categoryRepo.find({ relations: { products: true } })
+  async getAll(getDto: GetCategoriesDto) {
+    const { include, offset, limit } = getDto
+    if (include === 'products') {
+      return this.getAllWithProducts(offset, limit)
+    }
+
+    const [rows, count] = await this.categoryRepo.findAndCount({
+      select: ['id', 'name'],
+      order: { createdAt: 'DESC' },
+      skip: offset,
+      take: limit,
+    })
+
+    return {
+      total: count,
+      items: rows,
+    }
+  }
+
+  private async getAllWithProducts(offset: number, limit: number) {
+    const categories = await this.categoryRepo
+      .createQueryBuilder('c')
+      .select(['c.id', 'c.name'])
+      .innerJoin('c.products', 'p', 'p.status = :status', {
+        status: ProductStatus.PUBLISHED,
+      })
+      .groupBy('c.id')
+      .orderBy('c.createdAt', 'DESC')
+      .limit(4)
+      .getMany()
+
+    const promises = categories.map(category =>
+      this.productRepo
+        .createQueryBuilder('p')
+        .select([
+          'p.id id',
+          'p.name name',
+          'p.categoryId categoryId',
+          'MIN(v.price) minPrice',
+          'MAX(v.price) maxPrice',
+        ])
+        .innerJoin('p.variants', 'v', 'p.status = :status AND p.categoryId = :cid', {
+          status: ProductStatus.PUBLISHED,
+          cid: category.id,
+        })
+        .innerJoin('p.productFiles', 'pf', 'pf.order IN (0,1)')
+        .innerJoin('pf.file', 'f')
+        .addSelect('MAX(CASE WHEN pf.`order` = 0 THEN f.name END)', 'thumb0')
+        .addSelect('MAX(CASE WHEN pf.`order` = 1 THEN f.name END)', 'thumb1')
+        .groupBy('p.id')
+        .orderBy('p.createdAt', 'DESC')
+        .offset(offset)
+        .limit(limit)
+        .getRawMany()
+        .then(rows => ({
+          ...category,
+          products: rows.map(row =>
+            plainToInstance(ProductResDto, row, { excludeExtraneousValues: true })
+          ),
+        }))
+    )
+
+    const items = await Promise.all(promises)
+    return { items }
   }
 }

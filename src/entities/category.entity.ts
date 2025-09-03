@@ -8,7 +8,7 @@ import {
 } from 'typeorm'
 import Product from './product.entity'
 
-@Entity()
+@Entity('Category')
 export default class Category {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number
