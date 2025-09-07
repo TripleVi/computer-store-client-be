@@ -6,6 +6,7 @@ import { Category, Product } from 'src/entities'
 import { ProductStatus } from 'src/entities/product.entity'
 import { Repository } from 'typeorm'
 import { GetCategoriesDto } from './dto'
+import GetRecsDto from './dto/get-recs.dto'
 
 @Injectable()
 export default class CategoryService {
@@ -14,12 +15,8 @@ export default class CategoryService {
     @InjectRepository(Product) private readonly productRepo: Repository<Product>
   ) {}
 
-  async getAll(getDto: GetCategoriesDto) {
-    const { include, offset, limit } = getDto
-    if (include === 'products') {
-      return this.getAllWithProducts(offset, limit)
-    }
-
+  async getAll(dto: GetCategoriesDto) {
+    const { offset, limit } = dto
     const [rows, count] = await this.categoryRepo.findAndCount({
       select: ['id', 'name'],
       order: { createdAt: 'DESC' },
@@ -27,13 +24,20 @@ export default class CategoryService {
       take: limit,
     })
 
-    return {
-      total: count,
-      items: rows,
-    }
+    return { total: count, items: rows }
   }
 
-  private async getAllWithProducts(offset: number, limit: number) {
+  async getOne(id: number) {
+    const category = await this.categoryRepo.findOne({
+      select: ['id', 'name'],
+      where: { id },
+    })
+    if (category) return category
+    throw new Error('CATEGORY_NOT_FOUND')
+  }
+
+  async recommend(dto: GetRecsDto) {
+    const { offset, limit } = dto
     const categories = await this.categoryRepo
       .createQueryBuilder('c')
       .select(['c.id', 'c.name'])
@@ -54,6 +58,7 @@ export default class CategoryService {
           'p.categoryId categoryId',
           'MIN(v.price) minPrice',
           'MAX(v.price) maxPrice',
+          'SUM(v.sold) sold',
         ])
         .innerJoin('p.variants', 'v', 'p.status = :status AND p.categoryId = :cid', {
           status: ProductStatus.PUBLISHED,
@@ -76,7 +81,6 @@ export default class CategoryService {
         }))
     )
 
-    const items = await Promise.all(promises)
-    return { items }
+    return await Promise.all(promises)
   }
 }

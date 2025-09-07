@@ -6,10 +6,7 @@ export class ProductResDto {
   @Expose() categoryId: number
   @Expose() minPrice: number
   @Expose() maxPrice: number
-
-  @Expose()
-  @Transform(params => Number(params.value ?? 0))
-  quantity: number
+  @Expose() sold: number
 
   @Expose()
   @Transform(
@@ -21,5 +18,5 @@ export class ProductResDto {
     },
     { toClassOnly: true }
   )
-  thumbnails: string[]
+  images: string[]
 }

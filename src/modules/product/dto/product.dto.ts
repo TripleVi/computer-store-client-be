@@ -32,7 +32,7 @@ class VariantDto {
   @Expose() price: number
 }
 
-export class ProductResDto {
+export class ProductDto {
   @Expose() id: number
   @Expose() name: string
   @Expose() description: string

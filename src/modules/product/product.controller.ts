@@ -6,19 +6,30 @@ import {
   NotFoundException,
   Param,
   Post,
+  Query,
 } from '@nestjs/common'
-import ProductService from './product.service'
 import RecommendProductsDto from './dto/recommend-products.dto'
+import SearchProductsDto from './dto/search-products.dto'
+import ProductService from './product.service'
 
 @Controller('products')
 export default class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Get('query')
+  async search(@Query() query: SearchProductsDto) {
+    try {
+      return await this.productService.search(query)
+    } catch (error) {
+      console.log(error)
+      throw new InternalServerErrorException()
+    }
+  }
+
   @Get(':id')
   async getOne(@Param('id') id: number) {
     try {
-      const result = await this.productService.getOne(id)
-      return result
+      return await this.productService.getOne(id)
     } catch (error) {
       const { message } = error as Error
       if (message === 'PRODUCT_NOT_FOUND') {
@@ -31,8 +42,7 @@ export default class ProductController {
   @Post('recommendations')
   async getRecommendations(@Body() dto: RecommendProductsDto) {
     try {
-      const result = await this.productService.recommend(dto)
-      return result
+      return await this.productService.recommend(dto)
     } catch (error) {
       // const { message } = error as Error
       // if (message === 'PRODUCT_NOT_FOUND') {
