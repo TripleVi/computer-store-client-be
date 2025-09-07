@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import Joi from 'joi'
 import path from 'path'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
+import { VariantModule } from './modules/variant/variant.module';
 import AppController from './app.controller'
 import AppService from './app.service'
 import CategoryModule from './modules/category/category.module'
@@ -40,6 +41,7 @@ import ProductModule from './modules/product/product.module'
     }),
     CategoryModule,
     ProductModule,
+    VariantModule,
   ],
   controllers: [AppController],
   providers: [AppService],
