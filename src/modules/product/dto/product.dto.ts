@@ -1,5 +1,5 @@
 import { Expose, Transform, Type } from 'class-transformer'
-import { Option, Product } from 'src/entities'
+import { Option, Product, Variant } from 'src/entities'
 
 class CategoryDto {
   @Expose() id: number
@@ -21,15 +21,23 @@ class TypeDto {
   @Expose() id: number
   @Expose() name: string
 
-  @Type(() => OptionDto)
   @Expose()
+  @Type(() => OptionDto)
   options: OptionDto[]
 }
 
 class VariantDto {
+  @Expose() id: number
   @Expose() sold: number
   @Expose() quantity: number
   @Expose() price: number
+
+  @Expose()
+  // params.value return undefined ???
+  @Transform(params => (params.obj as Variant).options.map(o => o.id), {
+    toClassOnly: true,
+  })
+  options: number[]
 }
 
 export class ProductDto {
@@ -37,16 +45,16 @@ export class ProductDto {
   @Expose() name: string
   @Expose() description: string
 
-  @Type(() => CategoryDto)
   @Expose()
+  @Type(() => CategoryDto)
   category: CategoryDto
 
-  @Type(() => TypeDto)
   @Expose()
+  @Type(() => TypeDto)
   types: TypeDto[]
 
-  @Type(() => VariantDto)
   @Expose()
+  @Type(() => VariantDto)
   variants: VariantDto[]
 
   @Expose()

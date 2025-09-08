@@ -35,6 +35,7 @@ export default class ProductController {
       if (message === 'PRODUCT_NOT_FOUND') {
         throw new NotFoundException()
       }
+      console.log(error)
       throw new InternalServerErrorException()
     }
   }

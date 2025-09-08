@@ -29,7 +29,7 @@ export default class ProductService {
     return this.productRepo
       .createQueryBuilder('p')
       .select(
-        'p.id, p.name, p.description, c.id, c.name, t.id, t.name, o.id, o.name, of.name, pf.id, pff.name, v.quantity, v.sold, v.price'.split(
+        'p.id, p.name, p.description, c.id, c.name, t.id, t.name, o.id, o.name, of.name, pf.id, pff.name, v.id, v.quantity, v.sold, v.price, vo.id'.split(
           ', '
         )
       )
@@ -40,6 +40,7 @@ export default class ProductService {
       .innerJoin('p.productFiles', 'pf')
       .innerJoin('pf.file', 'pff')
       .innerJoin('p.variants', 'v')
+      .innerJoin('v.options', 'vo')
       .orderBy('t.order')
       .addOrderBy('o.order')
       .getOne()
@@ -64,7 +65,7 @@ export default class ProductService {
   private createGetAllQueryBuilder(): SelectQueryBuilder<Product> {
     return this.productRepo
       .createQueryBuilder('product')
-      .select(['product.id', 'product.name', 'pf.id', 'pff.name', ''])
+      .select(['product.id', 'product.name', 'pf.id', 'pff.name'])
       .addSelect('product.id', 'pid')
       .addSelect('MIN(v.price)', 'minPrice')
       .addSelect('MAX(v.price)', 'maxPrice')
