@@ -5,9 +5,10 @@ import AppModule from './app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  const configService = app.get(ConfigService)
 
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: [configService.get<string>('ORIGIN', '')],
     optionsSuccessStatus: 200,
     credentials: true,
   })
@@ -29,7 +30,6 @@ async function bootstrap() {
     })
   )
 
-  const configService = app.get(ConfigService)
   const PORT = configService.get<number>('PORT', 3000)
   await app.listen(PORT)
   console.log('Server is running on port', PORT)

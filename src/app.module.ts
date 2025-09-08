@@ -21,6 +21,7 @@ import ProductModule from './modules/product/product.module'
         DB_NAME: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
+        ORIGIN: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
