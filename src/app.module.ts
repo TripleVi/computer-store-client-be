@@ -4,11 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import Joi from 'joi'
 import path from 'path'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
-import { VariantModule } from './modules/variant/variant.module';
 import AppController from './app.controller'
 import AppService from './app.service'
 import CategoryModule from './modules/category/category.module'
 import ProductModule from './modules/product/product.module'
+import { VariantModule } from './modules/variant/variant.module'
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ import ProductModule from './modules/product/product.module'
         database: configService.getOrThrow('DB_NAME'),
         entities: [path.join(__dirname, 'entities', '*.entity.{ts,js}')],
         synchronize: false,
-        logging: true,
+        logging: false,
         namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
