@@ -3,7 +3,7 @@ import Type from './type.entity'
 import Variant from './variant.entity'
 import File from './file.entity'
 
-@Entity()
+@Entity('Option')
 export default class Option {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number

@@ -64,7 +64,7 @@ export default class ProductService {
   private createGetAllQueryBuilder(): SelectQueryBuilder<Product> {
     return this.productRepo
       .createQueryBuilder('product')
-      .select(['product.id', 'product.name', 'pf.id', 'pff.name'])
+      .select(['product.id', 'product.name', 'pf.id', 'pff.name', ''])
       .addSelect('product.id', 'pid')
       .addSelect('MIN(v.price)', 'minPrice')
       .addSelect('MAX(v.price)', 'maxPrice')
