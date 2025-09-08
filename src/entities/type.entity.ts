@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 import Option from './option.entity'
 import Product from './product.entity'
 
-@Entity('Type')
+@Entity()
 export default class Type {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number

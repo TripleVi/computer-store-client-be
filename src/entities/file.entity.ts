@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('File')
+@Entity()
 export default class File {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number

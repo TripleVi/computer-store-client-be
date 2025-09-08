@@ -9,7 +9,7 @@ import {
 import Option from './option.entity'
 import Product from './product.entity'
 
-@Entity('Variant')
+@Entity()
 export default class Variant {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number
@@ -36,6 +36,6 @@ export default class Variant {
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE',
   })
-  @JoinTable({ name: 'Variant_Option' })
+  @JoinTable({ name: 'variant_option' })
   options: Option[]
 }

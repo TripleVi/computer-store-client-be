@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import File from './file.entity'
 import Product from './product.entity'
 
-@Entity('Product_File')
+@Entity()
 export default class ProductFile {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number
