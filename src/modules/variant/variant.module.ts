@@ -9,4 +9,4 @@ import { Variant } from 'src/entities'
   controllers: [VariantController],
   providers: [VariantService],
 })
-export class VariantModule {}
+export default class VariantModule {}
