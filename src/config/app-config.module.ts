@@ -18,6 +18,7 @@ import Joi from 'joi'
         JWT_SECRET: Joi.string().required(),
         ACCESS_TOKEN_EXPIRES_IN: Joi.string().required(),
         REFRESH_TOKEN_EXPIRES_IN: Joi.string().required(),
+        COOKIE_SECRET: Joi.string().required(),
       }),
     }),
   ],

@@ -1,6 +1,8 @@
 import { BadRequestException, ValidationError, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
+import cookieParser from 'cookie-parser'
+
 import AppModule from './app.module'
 import { LoggerMiddleware } from './common/middlewares'
 
@@ -13,6 +15,7 @@ async function bootstrap() {
     optionsSuccessStatus: 200,
     credentials: true,
   })
+  app.use(cookieParser(configService.getOrThrow('COOKIE_SECRET')))
   app.setGlobalPrefix('api/v1')
   app.use(new LoggerMiddleware().use)
 
