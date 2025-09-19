@@ -7,6 +7,7 @@ import Joi from 'joi'
     ConfigModule.forRoot({
       isGlobal: true, // injected into all modules
       validationSchema: Joi.object({
+        NODE_ENV: Joi.string().required(),
         PORT: Joi.number().required(),
         DOMAIN: Joi.string().required(),
         CLIENT: Joi.string().required(),

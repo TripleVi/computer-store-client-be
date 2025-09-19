@@ -15,7 +15,7 @@ export default class AuthService {
     })
   }
 
-  async guest() {
+  async genGuestToken() {
     const accessToken = await this.jwtService.signAsync({})
     const refreshToken = await this.genRefreshToken({})
     return { accessToken, refreshToken }
