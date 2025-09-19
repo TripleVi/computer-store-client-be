@@ -7,7 +7,10 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common'
+
+import { JwtAuthGuard } from 'src/common/guards'
 import RecommendProductsDto from './dto/recommend-products.dto'
 import SearchProductsDto from './dto/search-products.dto'
 import ProductService from './product.service'
@@ -16,6 +19,7 @@ import ProductService from './product.service'
 export default class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('query')
   async search(@Query() query: SearchProductsDto) {
     try {
