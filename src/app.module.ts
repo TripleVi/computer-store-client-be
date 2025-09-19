@@ -4,6 +4,7 @@ import AppService from './app.service'
 import AppConfigModule from './config/app-config.module'
 import DatabaseModule from './database/database.module'
 import { CategoryModule, ProductModule, VariantModule } from './modules'
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CategoryModule, ProductModule, VariantModule } from './modules'
     CategoryModule,
     ProductModule,
     VariantModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

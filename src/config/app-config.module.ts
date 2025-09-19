@@ -8,12 +8,16 @@ import Joi from 'joi'
       isGlobal: true, // injected into all modules
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
+        DOMAIN: Joi.string().required(),
+        CLIENT: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),
         DB_NAME: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
-        ORIGIN: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_EXPIRES_IN: Joi.string().required(),
+        REFRESH_TOKEN_EXPIRES_IN: Joi.string().required(),
       }),
     }),
   ],
