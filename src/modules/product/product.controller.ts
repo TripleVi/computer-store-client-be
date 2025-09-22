@@ -19,7 +19,7 @@ import ProductService from './product.service'
 export default class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('query')
   async search(@Query() query: SearchProductsDto) {
     try {
